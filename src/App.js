@@ -5,7 +5,7 @@ function App() {
   const [transactions, setTransactions] = useState([])
 
   const fetchTransactions = async () => {
-    const res = await axios.post('https://your-replit-url.replit.app/get-transactions')
+    const res = await axios.post('https://replit.com/@jameslimon1/budget-tracker-backend')
     setTransactions(res.data.transactions)
   }
 
