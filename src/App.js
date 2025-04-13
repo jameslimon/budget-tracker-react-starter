@@ -1,22 +1,41 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 
 function App() {
   const [transactions, setTransactions] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const apiUrl = process.env.REACT_APP_API_URL // 👈 from .env or Vercel environment variable
 
   const fetchTransactions = async () => {
-    const res = await axios.post('https://replit.com/@jameslimon1/budget-tracker-backend')
-    setTransactions(res.data.transactions)
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await axios.post(`${apiUrl}/get-transactions`)
+      setTransactions(res.data.transactions || [])
+    } catch (err) {
+      setError('Failed to fetch transactions.')
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>Budget Tracker</h1>
-      <button onClick={fetchTransactions}>Fetch Transactions</button>
-      <ul>
+    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+      <h1>💰 Budget Tracker</h1>
+      <button onClick={fetchTransactions} style={{ padding: '0.5rem 1rem' }}>
+        Fetch Transactions
+      </button>
+
+      {loading && <p>Loading transactions...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <ul style={{ marginTop: '1rem' }}>
         {transactions.map((tx, i) => (
           <li key={i}>
-            {tx.description} — ₱{tx.amount}
+            <strong>{tx.description}</strong> — ₱{tx.amount}
           </li>
         ))}
       </ul>
