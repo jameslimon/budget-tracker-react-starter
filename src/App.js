@@ -6,7 +6,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const apiUrl = process.env.REACT_APP_API_URL // 👈 from .env or Vercel environment variable
+  const apiUrl = process.env.REACT_APP_API_URL // 
 
   const fetchTransactions = async () => {
     setLoading(true)
